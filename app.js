@@ -18,7 +18,7 @@ app.use(function(req, res, next) {
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 
-app.use('/public/images', express.static(__root + 'public/images/'));
+app.use('/newsdekho/api/public/images', express.static(__root + 'public/images/'));
 var storage = multer.diskStorage({
   destination: (req, file, callBack) => {
       callBack(null, './public/images/')     // './public/images/' directory name where save the file
@@ -32,7 +32,7 @@ var upload = multer({
   storage: storage
 }).single("image");
 
-app.post('/upload', upload, function (req, res) {
+app.post('/newsdekho/api/upload', upload, function (req, res) {
   res.set('Access-Control-Allow-Origin', '*');
   console.log(req.file);
   if (!req.file) {
