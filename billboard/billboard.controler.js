@@ -9,7 +9,7 @@ router.post('/', Authenticate,function (req, res) {
     res.set('Access-Control-Allow-Origin', '*');
     if (req.body) {
         let currentUser=req.author;
-        billboardModel.craeteResource(req.body, currentUser)
+        billboardModel.craeteResource(req.body, currentUser, 'billboard')
         .then((result) => {
             return res.status(rcode.OK).json(rformat.successMsg(`billboard created successfully!`))
         }).catch((error) => {
@@ -29,7 +29,7 @@ router.post('/', Authenticate,function (req, res) {
 
 router.get('/', function (req, res) {
     res.set('Access-Control-Allow-Origin', '*');
-    billboardModel.getResource()
+    billboardModel.getBillboards()
         .then((billboard) => {
             return res.status(rcode.OK).json(rformat.success(billboard));
         })
@@ -42,6 +42,22 @@ router.get('/', function (req, res) {
         res.set('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
         res.set('Access-Control-Allow-Headers', 'content-type, x-access-token');
     });
+
+router.get('/raw', function (req, res) {
+    res.set('Access-Control-Allow-Origin', '*');
+    billboardModel.getResource(true, 'billboard')
+        .then((billboards) => {
+            return res.status(rcode.OK).json(rformat.success(billboards));
+        })
+        .catch((error) => {
+            return res.status(rcode.INTERNAL_SERVER_500).json(rformat.failure(`Fail to fetch the billboards ${error}`));
+        })
+})
+    .options('/raw', function (req, res) {
+        res.set('Access-Control-Allow-Origin', '*');
+        res.set('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+        res.set('Access-Control-Allow-Headers', 'content-type, x-access-token');
+    })
 
 router.get('/size/:size', function (req, res) {
     res.set('Access-Control-Allow-Origin', '*');

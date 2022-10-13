@@ -1,6 +1,6 @@
 const BaseResource = require('../common/base.resource');
 const mongoose = require('mongoose');
-const collection = mongoose.model('Poll');
+const collection = mongoose.model('Post');
 const dbModel = require('../database/database.model')
 class PollModel extends BaseResource {
     

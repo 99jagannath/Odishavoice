@@ -16,7 +16,7 @@ router.post('/', Authenticate,  function (req, res) {
         
         let currentUser=req.author;
         console.log(req.author);
-        PostModel.craeteResource(req.body, currentUser)
+        PostModel.craeteResource(req.body, currentUser, 'post')
         .then((result) => {
             console.log('Post created successfully');
             return res.status(rcode.OK).json(rformat.successMsg(`post created successfully!`))
@@ -65,7 +65,7 @@ router.get('/', function (req, res) {
 
 router.get('/raw', function (req, res) {
     res.set('Access-Control-Allow-Origin', '*');
-    PostModel.getResource(true)
+    PostModel.getResource(true, 'post')
         .then((post) => {
             return res.status(rcode.OK).json(rformat.success(post));
         })
@@ -79,22 +79,21 @@ router.get('/raw', function (req, res) {
         res.set('Access-Control-Allow-Headers', 'content-type, x-access-token');
     });
 
-    router.get('/authorpost',Authenticate, function (req, res) {
+router.get('/onlypost', function (req, res) {
+    res.set('Access-Control-Allow-Origin', '*');
+    PostModel.getArticle()
+        .then((post) => {
+            return res.status(rcode.OK).json(rformat.success(post));
+        })
+        .catch((error) => {
+            return res.status(rcode.INTERNAL_SERVER_500).json(rformat.failure(`Fail to fetch the post ${error}`));
+        })
+})
+    .options('/onlypost', function (req, res) {
         res.set('Access-Control-Allow-Origin', '*');
-        let currentUser=req.author;
-        PostModel.filterPost({createdBy: currentUser._id, status: {$ne: "deteted"} })
-            .then((post) => {
-                return res.status(rcode.OK).json(rformat.success(post));
-            })
-            .catch((error) => {
-                return res.status(rcode.INTERNAL_SERVER_500).json(rformat.failure(`Fail to fetch the post ${error}`));
-            })
-    })
-        .options('/authorpost', function (req, res) {
-            res.set('Access-Control-Allow-Origin', '*');
-            res.set('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-            res.set('Access-Control-Allow-Headers', 'content-type, x-access-token');
-        });
+        res.set('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+        res.set('Access-Control-Allow-Headers', 'content-type, x-access-token');
+    });
 
 router.get('/hashtags', function (req, res) {
     res.set('Access-Control-Allow-Origin', '*');
@@ -106,7 +105,24 @@ router.get('/hashtags', function (req, res) {
             return res.status(rcode.INTERNAL_SERVER_500).json(rformat.failure(`Fail to fetch the post ${error}`));
         })
 })
-    .options('/', function (req, res) {
+    .options('/hashtags', function (req, res) {
+        res.set('Access-Control-Allow-Origin', '*');
+        res.set('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+        res.set('Access-Control-Allow-Headers', 'content-type, x-access-token');
+    });
+
+router.get('/limit/:lmt', function (req, res) {
+    var lmt = Number(req.params.lmt);
+    res.set('Access-Control-Allow-Origin', '*');
+    PostModel.getposts(lmt)
+        .then((post) => {
+            return res.status(rcode.OK).json(rformat.success(post));
+        })
+        .catch((error) => {
+            return res.status(rcode.INTERNAL_SERVER_500).json(rformat.failure(`Fail to fetch the post ${error}`));
+        })
+})
+    .options('/limit:/lmt', function (req, res) {
         res.set('Access-Control-Allow-Origin', '*');
         res.set('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
         res.set('Access-Control-Allow-Headers', 'content-type, x-access-token');

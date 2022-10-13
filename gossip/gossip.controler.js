@@ -9,7 +9,7 @@ router.post('/', Authenticate,function (req, res) {
     res.set('Access-Control-Allow-Origin', '*');
     if (req.body) {
         let currentUser=req.author;
-        gossipModel.craeteResource(req.body, currentUser)
+        gossipModel.craeteResource(req.body, currentUser, 'gossip')
         .then((result) => {
             return res.status(rcode.OK).json(rformat.successMsg(`gossip created successfully!`))
         }).catch((error) => {
@@ -45,7 +45,7 @@ router.get('/', function (req, res) {
 
 router.get('/raw', function (req, res) {
     res.set('Access-Control-Allow-Origin', '*');
-    gossipModel.getResource()
+    gossipModel.getResource(true, 'gossip')
         .then((gossips) => {
             return res.status(rcode.OK).json(rformat.success(gossips));
         })

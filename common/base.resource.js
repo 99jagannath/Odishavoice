@@ -5,10 +5,11 @@ class BaseResource {
         this.collection = collection;
     }
 
-    craeteResource(payload, currentUser={}) {
+    craeteResource(payload, currentUser={}, mode= null) {
         const self = this;
         return new Promise(function (resolve, reject) {
             payload['createdBy'] = currentUser;
+            payload['mode'] = mode;
             dbModel.insert(self.collection, payload)
                 .then((result) =>{
                     return resolve(result);
@@ -19,9 +20,9 @@ class BaseResource {
         })
     }
 
-    getResource(populate=false) {
+    getResource(populate=false, mode=null) {
         const self = this;
-        const key ={};
+        const key ={mode: mode};
         return new Promise(function (resolve, reject) {
             dbModel.find(self.collection,key,populate)
                 .then((result) =>{

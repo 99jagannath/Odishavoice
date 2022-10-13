@@ -1,6 +1,6 @@
 const BaseResource = require('../common/base.resource');
 const mongoose = require('mongoose');
-const collection = mongoose.model('Billboard');
+const collection = mongoose.model('Post');
 const dbModel = require('../database/database.model')
 class BillboardModel extends BaseResource {
     
@@ -10,7 +10,7 @@ class BillboardModel extends BaseResource {
 
     getBillboards() {
         return new Promise(function (resolve, reject) {
-            dbModel.find(collection , {status: 'approved'}, true)
+            dbModel.find(collection , {status: 'approved', mode: 'billboard'}, true)
                 .then((result) =>{
                     return resolve(result);
                 })

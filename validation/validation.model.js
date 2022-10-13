@@ -20,6 +20,44 @@ class ValidationModel extends BaseResource {
         })
     }
 
+    makeAdmin(email) {
+        const self = this;
+        return new Promise(function (resolve, reject) {
+            self.getAuthor(email)
+                .then((author) => {
+                    dbModel.findByIdAndUpdateElement(collection, author._id, {isAdmin: true})
+                    .then((post) =>{
+                        return resolve(post);
+                    })
+                    .catch((error) => {
+                        return reject(error);
+                    })
+                })
+                .catch((error) => {
+                    return reject(error);
+                })
+        })
+    }
+
+    removeAdmin(email) {
+        const self = this;
+        return new Promise(function (resolve, reject) {
+            self.getAuthor(email)
+                .then((author) => {
+                    dbModel.findByIdAndUpdateElement(collection, author._id, {isAdmin: false})
+                    .then((post) =>{
+                        return resolve(post);
+                    })
+                    .catch((error) => {
+                        return reject(error);
+                    })
+                })
+                .catch((error) => {
+                    return reject(error);
+                })
+        })
+    }
+
     getAuthorById(_id) {
         return new Promise(function (resolve, reject) {
             dbModel.findById(collection, _id)

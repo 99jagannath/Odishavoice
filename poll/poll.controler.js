@@ -10,7 +10,7 @@ router.post('/',Authenticate, function (req, res) {
     res.set('Access-Control-Allow-Origin', '*');
     let currentUser=req.author;
     if (req.body) {
-        PollModel.craeteResource(req.body, currentUser)
+        PollModel.craeteResource(req.body, currentUser, 'poll')
         .then((result) => {
             return res.status(rcode.OK).json(rformat.successMsg(`Poll created successfully!`))
         }).catch((error) => {
@@ -30,7 +30,7 @@ router.post('/',Authenticate, function (req, res) {
 
 router.get('/', function (req, res) {
     res.set('Access-Control-Allow-Origin', '*');
-    PollModel.getResource()
+    PollModel.getResource(true, 'poll')
         .then((polls) => {
             return res.status(rcode.OK).json(rformat.success(polls));
         })

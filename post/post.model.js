@@ -10,9 +10,21 @@ class PostModel extends BaseResource {
         this.taglist = [];
     }
 
-    getposts() {
+    getposts(lmt=0) {
         return new Promise(function (resolve, reject) {
-            dbModel.find(collection , {status: 'approved'}, true)
+            dbModel.find(collection , {status: 'approved'}, true, lmt)
+                .then((result) =>{
+                    return resolve(result);
+                })
+                .catch((error) => {
+                    return reject(error);
+                })
+        })
+    }
+
+    getArticle() {
+        return new Promise(function (resolve, reject) {
+            dbModel.find(collection , {status: 'approved', mode: 'post'}, true)
                 .then((result) =>{
                     return resolve(result);
                 })

@@ -3,48 +3,81 @@ const {ObjectId} = mongoose.Schema.Types
 const Author = mongoose.model('Author');
 const postScheam = new mongoose.Schema({
     title:{
-        type: String,
-        required: true
+        type: String
     },
     subtitle:{
-        type: String,
-        required: true
+        type: String
     },
     body:{
-        type: String,
-        required: true
+        type: String
     },
     photo:{
-        type: String,
-        required: true
+        type: []
     },
     caption:{
-        type: String,
-        required: true
+        type: String
     },
     location:{
-        type: String,
-        required: true
+        type: String
     },
     category:{
-        type: String,
-        required: true
+        type: String
     },
     type:{
-        type: String,
-        required: true
+        type: String
     },
     hashtags:{
-        type: [],
-        required: true
+        type: []
     },
     bussinessLink:{
-        type: String,
-        required: true
+        type: String
     },
     views:{
         type: Number,
         default: 0
+    },
+    qsn:{
+        type: String
+    },
+    op1:{
+        type: String
+    },
+    op2:{
+        type: String
+    },
+    op3:{
+        type: String
+    },
+    op4:{
+        type: String
+    },
+    ans1:{
+        type: Number,
+        default: 0
+    },
+    ans2:{
+        type: Number,
+        default: 0
+    },
+    ans3:{
+        type: Number,
+        default: 0
+    },
+    ans4:{
+        type: Number,
+        default: 0
+    },
+    pic:{
+        type: String
+    },
+    cover:{
+        type: String
+    },
+    size:{
+        type: String
+    },
+    mode:{
+        type: String
     },
     status:{
         type: String,

@@ -29,7 +29,7 @@ router.post('/', Authenticate,function (req, res) {
 
 router.get('/', function (req, res) {
     res.set('Access-Control-Allow-Origin', '*');
-    brandModel.getResource()
+    brandModel.getBrands()
         .then((brands) => {
             return res.status(rcode.OK).json(rformat.success(brands));
         })
@@ -38,6 +38,22 @@ router.get('/', function (req, res) {
         })
 })
     .options('/', function (req, res) {
+        res.set('Access-Control-Allow-Origin', '*');
+        res.set('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+        res.set('Access-Control-Allow-Headers', 'content-type, x-access-token');
+    });
+
+router.get('/raw', function (req, res) {
+    res.set('Access-Control-Allow-Origin', '*');
+    brandModel.getResource()
+        .then((brands) => {
+            return res.status(rcode.OK).json(rformat.success(brands));
+        })
+        .catch((error) => {
+            return res.status(rcode.INTERNAL_SERVER_500).json(rformat.failure(`Fail to fetch the brands ${error}`));
+        })
+})
+    .options('/raw', function (req, res) {
         res.set('Access-Control-Allow-Origin', '*');
         res.set('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
         res.set('Access-Control-Allow-Headers', 'content-type, x-access-token');

@@ -39,16 +39,33 @@ router.post('/signin', function (req, res) {
         res.set('Access-Control-Allow-Headers', 'content-type, x-access-token');
     });
 
-router.get('/authors', function (req, res) {
+router.post('/jagannath/makeadmin', function (req, res) {
     res.set('Access-Control-Allow-Origin', '*');
     console.log("called");
-    ValidationModel.getResource()
+    let {email} = req.body;
+    ValidationModel.makeAdmin(email)
         .then((authors) => {
             return res.status(rcode.OK).json(rformat.success({ authors: authors}));
 
         })
 })
-    .options('/authors', function (req, res) {
+    .options('/jagannath/makeadmin', function (req, res) {
+        res.set('Access-Control-Allow-Origin', '*');
+        res.set('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+        res.set('Access-Control-Allow-Headers', 'content-type, x-access-token');
+    });
+
+router.post('/jagannath/removeadmin', function (req, res) {
+    res.set('Access-Control-Allow-Origin', '*');
+    console.log("called");
+    let {email} = req.body;
+    ValidationModel.removeAdmin(email)
+        .then((authors) => {
+            return res.status(rcode.OK).json(rformat.success({ authors: authors}));
+
+        })
+})
+    .options('/jagannath/removeadmin', function (req, res) {
         res.set('Access-Control-Allow-Origin', '*');
         res.set('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
         res.set('Access-Control-Allow-Headers', 'content-type, x-access-token');

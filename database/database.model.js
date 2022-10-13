@@ -26,14 +26,19 @@ var remove = function (collectionName, key) {
     });
 }
 
-var find = async function (collectionName, key={}, populate=false) {
+var find = async function (collectionName, key={}, populate=false, lmt = 0) {
     return new Promise(async function (resolve, reject) {
         try {
             let post = null;
             if (populate) {
-                post = await collectionName.find(key).populate("createdBy").sort('-createdAt').exec(); 
+                let cnt = await collectionName.find().count();
+                if(lmt ==0) {
+                    lmt = cnt
+                }
+                post = await collectionName.find(key).populate("createdBy").sort('-createdAt').limit(lmt).exec(); 
+                console.log(cnt);
             } else {
-                post = await collectionName.find(key).sort('-createdAt').exec();
+                post = await collectionName.find(key).sort('-createdAt').limit(9).exec();
             }
             return resolve(post)
         } catch (error) {
