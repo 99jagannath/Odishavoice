@@ -68,6 +68,29 @@ class PollModel extends BaseResource {
                 })
         })
     }
+    approvePoll(pollId) {
+        return new Promise(function (resolve, reject) {
+            dbModel.findByIdAndUpdateElement(collection, pollId, {status: 'approved'}, true)
+            .then((post) =>{
+                return resolve(post);
+            })
+            .catch((error) => {
+                return reject(error);
+            }) 
+        })
+    }
+
+    unapprovepoll(pollId) {
+        return new Promise(function (resolve, reject) {
+            dbModel.findByIdAndUpdateElement(collection, pollId, {status: 'pending'}, true)
+            .then((post) =>{
+                return resolve(post);
+            })
+            .catch((error) => {
+                return reject(error);
+            }) 
+        })
+    }
 
 }
 

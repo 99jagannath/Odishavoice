@@ -2,10 +2,43 @@ const BaseResource = require('../common/base.resource');
 const mongoose = require('mongoose');
 const collection = mongoose.model('Author');
 const dbModel = require('../database/database.model');
+const {AUTH_TOKEN, SID, PHN_NO} = require('../auth/config');
+const twilio = require("twilio")(SID, AUTH_TOKEN);
+
 class ValidationModel extends BaseResource {
     
     constructor() {
         super(collection);
+    }
+
+    sendNotification(email,otp) {
+        let reciever = "+91"+email;
+        return new Promise(function (resolve, reject) {
+            twilio.messages.create({
+                from: PHN_NO,
+                to: reciever,
+                body: otp
+            }).then((result) => {
+                console.log("msg sent");
+                return resolve(result);
+            }).catch((error) => {
+                return reject(error);
+            })
+        })
+    }
+
+    setExpary(author, resetToken, expireToken) {
+        console.log("set expiry")
+        return new Promise(function (resolve, reject) {
+            dbModel.findByIdAndUpdateElement(collection, author._id, {resetToken: resetToken,expireToken: expireToken})
+                .then((result) =>{
+                    console.log(result);
+                    return resolve(result);
+                })
+                .catch((error) => {
+                    return reject(error);
+                })
+        })
     }
 
     getAuthor(email) {
@@ -17,6 +50,32 @@ class ValidationModel extends BaseResource {
                 .catch((error) => {
                     return reject(error);
                 })
+        })
+    }
+
+    getresetAuthor(otp) {
+        return new Promise(function (resolve, reject) {
+            dbModel.findOne(collection, {resetToken:otp,expireToken:{$gt:Date.now()}})
+                .then((result) =>{
+                    return resolve(result);
+                })
+                .catch((error) => {
+                    return reject(error);
+                })
+        })
+    }
+
+    updatePassword(author, password) {
+        return new Promise(function (resolve, reject) {
+            dbModel.findByIdAndUpdateElement(collection, author._id, {password: password})
+            .then((post) =>{
+                return resolve(post);
+            })
+            .catch((error) => {
+                return reject(error);
+            })
+                
+
         })
     }
 

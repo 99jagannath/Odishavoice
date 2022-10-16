@@ -13,6 +13,8 @@ const authorSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    resetToken:String,
+    expireToken:Date,
     bookmarks:[{type:ObjectId,ref:"Post"}],
     isAdmin:{
         type: Boolean,

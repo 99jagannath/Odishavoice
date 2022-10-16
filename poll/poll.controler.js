@@ -43,7 +43,21 @@ router.get('/', function (req, res) {
         res.set('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
         res.set('Access-Control-Allow-Headers', 'content-type, x-access-token');
     });
-
+router.get('/raw', Authenticate, function (req, res) {
+    res.set('Access-Control-Allow-Origin', '*');
+    PollModel.getResource(true, 'poll')
+        .then((polls) => {
+            return res.status(rcode.OK).json(rformat.success(polls));
+        })
+        .catch((error) => {
+            return res.status(rcode.INTERNAL_SERVER_500).json(rformat.failure(`Fail to fetch the polls ${error}`));
+        })
+})
+    .options('/raw', function (req, res) {
+        res.set('Access-Control-Allow-Origin', '*');
+        res.set('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+        res.set('Access-Control-Allow-Headers', 'content-type, x-access-token');
+    });
 router.get('/latest', function (req, res) {
     res.set('Access-Control-Allow-Origin', '*');
     PollModel.getLatestPoll()
@@ -77,10 +91,10 @@ router.get('/:id', function (req, res) {
         res.set('Access-Control-Allow-Headers', 'content-type, x-access-token');
     });
 
-router.delete('/:id', function (req, res) {
+router.delete('/:id',Authenticate, function (req, res) {
     res.set('Access-Control-Allow-Origin', '*');
     var pollId = req.params.id
-    PollModel.deletePoll(pollId)
+    PollModel.deleteResource(pollId)
         .then((poll) => {
             return res.status(rcode.OK).json(rformat.success(poll));
         })
@@ -89,6 +103,41 @@ router.delete('/:id', function (req, res) {
         })
 })
     .options('/:id', function (req, res) {
+        res.set('Access-Control-Allow-Origin', '*');
+        res.set('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+        res.set('Access-Control-Allow-Headers', 'content-type, x-access-token');
+    });
+
+
+router.put('/approve', Authenticate, function (req, res) {
+    res.set('Access-Control-Allow-Origin', '*');
+    var pollId = req.body._id;
+    PollModel.approvePoll(pollId)
+        .then((result) => {
+            return res.status(rcode.OK).json(rformat.success(result));
+        })
+        .catch((error) => {
+            return res.status(rcode.INTERNAL_SERVER_500).json(rformat.failure(`Failed to approve the poll ${error}`));
+        })
+})
+    .options('/approve', function (req, res) {
+        res.set('Access-Control-Allow-Origin', '*');
+        res.set('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+        res.set('Access-Control-Allow-Headers', 'content-type, x-access-token');
+    });
+
+router.put('/unapprove',Authenticate, function (req, res) {
+    res.set('Access-Control-Allow-Origin', '*');
+    var pollId = req.body._id;
+    PollModel.unapprovepoll(pollId)
+        .then((result) => {
+            return res.status(rcode.OK).json(rformat.success(result));
+        })
+        .catch((error) => {
+            return res.status(rcode.INTERNAL_SERVER_500).json(rformat.failure(`Failed to unapprove the poll ${error}`));
+        })
+})
+    .options('/unapprove', function (req, res) {
         res.set('Access-Control-Allow-Origin', '*');
         res.set('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
         res.set('Access-Control-Allow-Headers', 'content-type, x-access-token');

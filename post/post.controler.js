@@ -63,7 +63,7 @@ router.get('/', function (req, res) {
         res.set('Access-Control-Allow-Headers', 'content-type, x-access-token');
     });
 
-router.get('/raw', function (req, res) {
+router.get('/raw',Authenticate, function (req, res) {
     res.set('Access-Control-Allow-Origin', '*');
     PostModel.getResource(true, 'post')
         .then((post) => {
@@ -289,7 +289,27 @@ router.put('/unlike', Authenticate, function (req, res) {
         res.set('Access-Control-Allow-Headers', 'content-type, x-access-token');
     });
 
-router.put('/view', Authenticate, function (req, res) {
+router.put('/manipulate',Authenticate, function (req, res) {
+    console.log("called");
+    res.set('Access-Control-Allow-Origin', '*');
+    const {like, view, _id} = req.body;
+    PostModel.manipulate(like,view,_id)
+        .then((post) => {
+            return res.status(rcode.OK).json(rformat.success(post));    
+        })    
+        .catch((error) => {
+            return res.status(rcode.INTERNAL_SERVER_500).json(rformat.failure(`Fail to manipulate the post ${error}`));
+        })
+
+    })
+
+.options('/manipulate', function (req, res) {
+    res.set('Access-Control-Allow-Origin', '*');
+    res.set('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+    res.set('Access-Control-Allow-Headers', 'content-type, x-access-token');
+});
+
+router.put('/view', function (req, res) {
     res.set('Access-Control-Allow-Origin', '*');
     var postId = req.body._id;
     PostModel.getPostById(postId)

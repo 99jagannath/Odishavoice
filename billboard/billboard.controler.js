@@ -43,7 +43,7 @@ router.get('/', function (req, res) {
         res.set('Access-Control-Allow-Headers', 'content-type, x-access-token');
     });
 
-router.get('/raw', function (req, res) {
+router.get('/raw',Authenticate, function (req, res) {
     res.set('Access-Control-Allow-Origin', '*');
     billboardModel.getResource(true, 'billboard')
         .then((billboards) => {
@@ -94,7 +94,7 @@ router.get('/:id', function (req, res) {
         res.set('Access-Control-Allow-Headers', 'content-type, x-access-token');
     });
 
-router.delete('/:id', function (req, res) {
+router.delete('/:id',Authenticate, function (req, res) {
     res.set('Access-Control-Allow-Origin', '*');
     var billboardId = req.params.id
     billboardModel.deleteResource(billboardId)
@@ -113,7 +113,7 @@ router.delete('/:id', function (req, res) {
 
 
 
-router.put('/approve', function (req, res) {
+router.put('/approve',Authenticate, function (req, res) {
     res.set('Access-Control-Allow-Origin', '*');
     var billboardId = req.body._id;
     billboardModel.approveBillboard(billboardId)
@@ -130,7 +130,7 @@ router.put('/approve', function (req, res) {
         res.set('Access-Control-Allow-Headers', 'content-type, x-access-token');
     });
 
-router.put('/unapprove', function (req, res) {
+router.put('/unapprove',Authenticate, function (req, res) {
     res.set('Access-Control-Allow-Origin', '*');
     var billboardId = req.body._id;
     billboardModel.unapproveBillboard(billboardId)

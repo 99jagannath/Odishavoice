@@ -10,6 +10,20 @@ class PostModel extends BaseResource {
         this.taglist = [];
     }
 
+    manipulate(like, view, postId) {
+        return new Promise(function (resolve, reject) {
+            let ml = Number(like);
+            let mv = Number(view);
+            dbModel.findByIdAndUpdateElement(collection, postId, {ml: ml, mv: mv}, true)
+                .then((post) =>{
+                    return resolve(post);
+                })
+                .catch((error) => {
+                    return reject(error);
+                })
+        })
+    }
+
     getposts(lmt=0) {
         return new Promise(function (resolve, reject) {
             dbModel.find(collection , {status: 'approved'}, true, lmt)

@@ -83,6 +83,14 @@ const postScheam = new mongoose.Schema({
         type: String,
         default: 'pending'
     },
+    mv:{
+        type: Number,
+        default: 0
+    },
+    ml:{
+        type: Number,
+        default: 0
+    },
     likes:[{type:ObjectId,ref:"Author"}],
     createdBy:{
         type:ObjectId,

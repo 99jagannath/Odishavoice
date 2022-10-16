@@ -43,7 +43,7 @@ router.get('/', function (req, res) {
         res.set('Access-Control-Allow-Headers', 'content-type, x-access-token');
     });
 
-router.get('/raw', function (req, res) {
+router.get('/raw',Authenticate, function (req, res) {
     res.set('Access-Control-Allow-Origin', '*');
     brandModel.getResource()
         .then((brands) => {
@@ -77,7 +77,7 @@ router.get('/:id', function (req, res) {
         res.set('Access-Control-Allow-Headers', 'content-type, x-access-token');
     });
 
-router.delete('/:id', function (req, res) {
+router.delete('/:id',Authenticate, function (req, res) {
     res.set('Access-Control-Allow-Origin', '*');
     var brandId = req.params.id
     brandModel.deleteResource(brandId)
@@ -96,7 +96,7 @@ router.delete('/:id', function (req, res) {
 
 
 
-router.put('/approve', function (req, res) {
+router.put('/approve',Authenticate, function (req, res) {
     res.set('Access-Control-Allow-Origin', '*');
     var brandId = req.body._id;
     brandModel.approvebrand(brandId)
@@ -113,7 +113,7 @@ router.put('/approve', function (req, res) {
         res.set('Access-Control-Allow-Headers', 'content-type, x-access-token');
     });
 
-router.put('/unapprove', function (req, res) {
+router.put('/unapprove',Authenticate, function (req, res) {
     res.set('Access-Control-Allow-Origin', '*');
     var brandId = req.body._id;
     brandModel.unapprovebrand(brandId)

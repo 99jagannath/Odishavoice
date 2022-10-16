@@ -35,7 +35,7 @@ var find = async function (collectionName, key={}, populate=false, lmt = 0) {
                 if(lmt ==0) {
                     lmt = cnt
                 }
-                post = await collectionName.find(key).populate("createdBy").sort('-createdAt').limit(lmt).exec(); 
+                post = await collectionName.find(key).populate("createdBy","_id name").sort('-createdAt').limit(lmt).exec(); 
                 console.log(cnt);
             } else {
                 post = await collectionName.find(key).sort('-createdAt').limit(9).exec();
@@ -65,7 +65,7 @@ var findById = function (collectionName, documentId, populate=false) {
         try {
             let post = null;
             if (populate) {
-                post = await collectionName.findById(documentId).populate("createdBy").exec();
+                post = await collectionName.findById(documentId).populate("createdBy","_id name").exec();
             } else {
                 post = await collectionName.findById(documentId).exec();
             }
@@ -106,7 +106,7 @@ var findByIdAndUpdateElement = function (collectionName, documentId, updateQuery
         try {
             let post = null;
             if (populate) {
-                post = await collectionName.findByIdAndUpdate(documentId, updateQuery, {new: true}).populate("createdBy").exec();
+                post = await collectionName.findByIdAndUpdate(documentId, updateQuery, {new: true}).populate("createdBy","_id name").exec();
             } else {
               post = await collectionName.findByIdAndUpdate(documentId, updateQuery, {new: true}).exec();
             }

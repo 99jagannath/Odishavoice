@@ -7,6 +7,7 @@ var bcrypt = require('bcryptjs');
 var config = require('../auth/config');
 var jwt = require('jsonwebtoken');
 const { response } = require('express');
+var Authenticate =require('../auth/authenticate');
 
 
 router.post('/signin', function (req, res) {
@@ -69,7 +70,20 @@ router.post('/signup', function (req, res) {
         res.set('Access-Control-Allow-Headers', 'content-type, x-access-token');
     });
 
-router.delete('/poll/:id', function (req, res) {
+router.get('/isAdmin',Authenticate, function (req, res) {
+    res.set('Access-Control-Allow-Origin', '*');
+    console.log("login verification");
+    let currentUser=req.author;
+    const {isAdmin } = currentUser;
+    return res.status(rcode.OK).json(rformat.success({ isAdmin: isAdmin}));       
+})
+    .options('/isAdmin', function (req, res) {
+        res.set('Access-Control-Allow-Origin', '*');
+        res.set('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+        res.set('Access-Control-Allow-Headers', 'content-type, x-access-token');
+    });
+
+router.delete('/poll/:id',Authenticate, function (req, res) {
     res.set('Access-Control-Allow-Origin', '*');
     var pollId = req.params.id
     AdminModel.deleteResource(pollId)
@@ -86,7 +100,7 @@ router.delete('/poll/:id', function (req, res) {
         res.set('Access-Control-Allow-Headers', 'content-type, x-access-token');
     });
 
-router.delete('/post/:id', function (req, res) {
+router.delete('/post/:id',Authenticate, function (req, res) {
     res.set('Access-Control-Allow-Origin', '*');
     var postId = req.params.id
     AdminModel.deleteResource(postId)
@@ -103,7 +117,7 @@ router.delete('/post/:id', function (req, res) {
         res.set('Access-Control-Allow-Headers', 'content-type, x-access-token');
     });
 
-router.put('/approve', function (req, res) {
+router.put('/approve',Authenticate, function (req, res) {
     res.set('Access-Control-Allow-Origin', '*');
     var postId = req.body._id;
     AdminModel.approvePost(postId)
@@ -120,7 +134,7 @@ router.put('/approve', function (req, res) {
         res.set('Access-Control-Allow-Headers', 'content-type, x-access-token');
     });
 
-router.put('/unapprove', function (req, res) {
+router.put('/unapprove',Authenticate, function (req, res) {
     res.set('Access-Control-Allow-Origin', '*');
     var postId = req.body._id;
     AdminModel.unapprovePost(postId)
@@ -137,7 +151,7 @@ router.put('/unapprove', function (req, res) {
         res.set('Access-Control-Allow-Headers', 'content-type, x-access-token');
     });
 
-router.post('/newsletter', function (req, res) {
+router.post('/newsletter',Authenticate, function (req, res) {
     res.set('Access-Control-Allow-Origin', '*');
     var content = req.body;
     AdminModel.sendNewsLetter(content)
