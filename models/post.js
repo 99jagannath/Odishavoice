@@ -92,6 +92,7 @@ const postScheam = new mongoose.Schema({
         default: 0
     },
     likes:[{type:ObjectId,ref:"Author"}],
+    vote:[{type:ObjectId,ref:"Author"}],
     createdBy:{
         type:ObjectId,
         ref:"Author"

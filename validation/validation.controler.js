@@ -89,6 +89,12 @@ router.post('/notify', function (req, res) {
                 .then((response) => {
                     return res.status(rcode.OK).json(rformat.success({ response}));
                 })
+                .catch((err) => {
+                    console.log(err);
+                })
+            })
+            .catch((error) => {
+                console.log(error);
             })
            
         })

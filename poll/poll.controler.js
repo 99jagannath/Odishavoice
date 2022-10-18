@@ -143,12 +143,13 @@ router.put('/unapprove',Authenticate, function (req, res) {
         res.set('Access-Control-Allow-Headers', 'content-type, x-access-token');
     });
 
-router.put('/vote/:id', function (req, res) {
+router.put('/vote/:id',Authenticate, function (req, res) {
     res.set('Access-Control-Allow-Origin', '*');
     var pollId = req.params.id
     var option = req.body.opt;
     var answer = req.body.ans;
-    PollModel.votePoll(pollId, option, answer)
+    let currentUser=req.author;
+    PollModel.votePoll(pollId, option, answer, currentUser)
         .then((poll) => {
             return res.status(rcode.OK).json(rformat.success(poll));
         })
