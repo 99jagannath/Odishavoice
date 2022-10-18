@@ -1,3 +1,8 @@
+
+// Setting up env variable
+var dotenv = require('dotenv');
+dotenv.config();
+
 var mongoDB = require('./mongodb.connection');
 const port =process.env.PORT || 5000;
 

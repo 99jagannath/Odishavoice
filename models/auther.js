@@ -13,6 +13,7 @@ const authorSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    term:String,
     resetToken:String,
     expireToken:Date,
     bookmarks:[{type:ObjectId,ref:"Post"}],

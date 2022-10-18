@@ -53,6 +53,19 @@ class ValidationModel extends BaseResource {
         })
     }
 
+    getCheckedAuthor() {
+        return new Promise(function (resolve, reject) {
+            dbModel.find(collection, {term: "checked"})
+                .then((result) =>{
+                    
+                    return resolve(result);
+                })
+                .catch((error) => {
+                    return reject(error);
+                })
+        })
+    }
+
     getresetAuthor(otp) {
         return new Promise(function (resolve, reject) {
             dbModel.findOne(collection, {resetToken:otp,expireToken:{$gt:Date.now()}})

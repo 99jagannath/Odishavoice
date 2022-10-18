@@ -42,6 +42,34 @@ router.post('/signin', function (req, res) {
         res.set('Access-Control-Allow-Headers', 'content-type, x-access-token');
     });
 
+router.get('/checked', function (req, res) {
+    res.set('Access-Control-Allow-Origin', '*');
+    ValidationModel.getCheckedAuthor()
+    .then((authors) => {
+        console.log(authors.length);
+           let author_arr = []
+           for(let i=0;i<authors.length;i++) {
+            let author = authors[i];
+            console.log(author)
+            let auth ={};
+            auth.name = author.name;
+            auth.Phno = author.email;
+            author_arr.push(auth);
+           }
+           return res.status(rcode.OK).json(rformat.success({ author_arr})); 
+        })
+        .catch((error) => {
+            return res.status(rcode.NOT_FOUND).json(rformat.failure('error'))
+        })
+
+    
+})
+    .options('/checked', function (req, res) {
+        res.set('Access-Control-Allow-Origin', '*');
+        res.set('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+        res.set('Access-Control-Allow-Headers', 'content-type, x-access-token');
+    });
+
 
 router.post('/notify', function (req, res) {
     res.set('Access-Control-Allow-Origin', '*');
@@ -109,8 +137,8 @@ router.post('/jagannath/removeadmin', function (req, res) {
 
 router.post('/signup', function (req, res) {
     res.header("Access-Control-Allow-Origin", "*");
-    const {name, email, password} = req.body;
-    if (!name || !email || !password) {
+    const {name, email, password, term} = req.body;
+    if (!name || !email || !password || !term) {
         return res.status(rcode.INTERNAL_SERVER_500).json(rformat.failure('Some fields are missing'))
     }
     ValidationModel.getAuthor(email)
@@ -124,7 +152,8 @@ router.post('/signup', function (req, res) {
                         let author = {
                             name: name,
                             email: email,
-                            password: hashedpassword
+                            password: hashedpassword,
+                            term: term
                         }
                         let currentUser = req.user;
                         console.log(author);
