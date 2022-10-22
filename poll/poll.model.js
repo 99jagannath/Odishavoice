@@ -37,7 +37,7 @@ class PollModel extends BaseResource {
         return new Promise(function (resolve, reject) {
             self.getPollById(pollId)
             .then((poll) => {
-                let vote_arr = poll?.vote;
+                let vote_arr = poll.vote;
                 if(vote_arr.includes(currentUser._id)) {
                     return resolve(poll);
                 }
