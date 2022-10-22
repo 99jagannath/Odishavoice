@@ -72,7 +72,6 @@ router.post('/signup', function (req, res) {
 
 router.get('/isAdmin',Authenticate, function (req, res) {
     res.set('Access-Control-Allow-Origin', '*');
-    console.log("login verification");
     let currentUser=req.author;
     const {isAdmin } = currentUser;
     return res.status(rcode.OK).json(rformat.success({ isAdmin: isAdmin}));       

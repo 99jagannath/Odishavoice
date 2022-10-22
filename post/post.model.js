@@ -52,7 +52,6 @@ class PostModel extends BaseResource {
         return new Promise(function (resolve, reject) {
             dbModel.findById(collection, _id,  )
                 .then((result) =>{
-                    console.log(5,result);
                     return resolve(result);
                 })
                 .catch((error) => {
@@ -64,7 +63,11 @@ class PostModel extends BaseResource {
     getHashTags() {
         const self = this;
         return new Promise(function (resolve, reject) {
-            self.getposts()
+            let key = {
+                type: 'Trending',
+                status: 'approved'
+            }
+            self.filterPost(key)
                 .then((posts) => {
                     posts.forEach((post) => {
                         self.taglist.push(...post.hashtags);

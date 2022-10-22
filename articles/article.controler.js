@@ -6,9 +6,6 @@ const db = require('../database/database.model')
 
 router.post("/",(req,res)=>{
     const {title, body, pic} = req.body;
-    console.log(title);
-    console.log(body);
-    console.log(pic);
     var data = {
         title: title,
         body: body,

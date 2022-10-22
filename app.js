@@ -34,12 +34,9 @@ var upload = multer({
 
 app.post('/newsdekho/api/upload', upload, function (req, res) {
   res.set('Access-Control-Allow-Origin', '*');
-  console.log(req.file);
   if (!req.file) {
-      console.log(rcode.INTERNAL_SERVER_500, rformat.failure(`Unable to upload post`));
       return res.status(rcode.INTERNAL_SERVER_500).json(rformat.failure(`Unable to upload post`))
   } else {
-      console.log(req.file.filename)
       var imgsrc =  req.file.filename
       return res.status(rcode.OK).json(rformat.success(imgsrc));
   }

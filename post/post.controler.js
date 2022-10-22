@@ -15,10 +15,8 @@ router.post('/', Authenticate,  function (req, res) {
     if (req.body) {
         
         let currentUser=req.author;
-        console.log(req.author);
         PostModel.craeteResource(req.body, currentUser, 'post')
         .then((result) => {
-            console.log('Post created successfully');
             return res.status(rcode.OK).json(rformat.successMsg(`post created successfully!`))
             
         //     let notificationContent = 'notificaion details';
@@ -160,10 +158,9 @@ router.get('/tag/:tag', function (req, res) {
         },
         status: 'approved'
     }
-    console.log(key);
+
     PostModel.filterPost(key)
         .then((posts) => {
-            console.log(posts)
             return res.status(rcode.OK).json(rformat.success(posts));
         })
         .catch((error) => {
@@ -183,10 +180,8 @@ router.get('/type/:type', function (req, res) {
         type: type,
         status: 'approved'
     }
-    console.log(key);
     PostModel.filterPost(key)
         .then((posts) => {
-            console.log(posts.length)
             return res.status(rcode.OK).json(rformat.success(posts));
         })
         .catch((error) => {
@@ -255,8 +250,6 @@ router.put('/like', Authenticate, function (req, res) {
     res.set('Access-Control-Allow-Origin', '*');
     var postId = req.body._id;
     var userId = req.author._id;
-    console.log(postId)
-    console.log(userId);
     PostModel.likePost(postId, userId)
         .then((post) => {
             return res.status(rcode.OK).json(rformat.success(post));
@@ -290,7 +283,6 @@ router.put('/unlike', Authenticate, function (req, res) {
     });
 
 router.put('/manipulate',Authenticate, function (req, res) {
-    console.log("called");
     res.set('Access-Control-Allow-Origin', '*');
     const {like, view, _id} = req.body;
     PostModel.manipulate(like,view,_id)
@@ -335,7 +327,6 @@ router.put('/view', function (req, res) {
 
 router.put('/:id', Authenticate, function (req, res) {
     res.set('Access-Control-Allow-Origin', '*');
-    console.log('hiting hear');
     var postId = req.params.id;
     let currentUser=req.author;
     if (req.body) {

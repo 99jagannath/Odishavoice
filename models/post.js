@@ -73,6 +73,9 @@ const postScheam = new mongoose.Schema({
     cover:{
         type: String
     },
+    near:{
+        type: String
+    },
     size:{
         type: String
     },

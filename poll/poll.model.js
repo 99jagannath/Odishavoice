@@ -22,7 +22,6 @@ class PollModel extends BaseResource {
 
     votePoll(pollId, option, answer, currentUser) {
         const self = this;
-        console.log("voting");
         answer = Number(answer);
         let key ={};
         if(option == '1') {
@@ -38,15 +37,11 @@ class PollModel extends BaseResource {
         return new Promise(function (resolve, reject) {
             self.getPollById(pollId)
             .then((poll) => {
-                console.log(poll);
                 let vote_arr = poll?.vote;
                 if(vote_arr.includes(currentUser._id)) {
-                    console.log("already_voted")
                     return resolve(poll);
                 }
-                console.log("new voating");
                 let f_key = {$push: {vote: currentUser._id}}
-                console.log(f_key);
                 dbModel.findByIdAndUpdateElement(collection, pollId, key, true)
                     .then((post) => {
                         dbModel.findByIdAndUpdateElement(collection, pollId, f_key, true)

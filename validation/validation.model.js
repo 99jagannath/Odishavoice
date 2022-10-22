@@ -19,7 +19,6 @@ class ValidationModel extends BaseResource {
                 to: reciever,
                 body: otp
             }).then((result) => {
-                console.log("msg sent");
                 return resolve(result);
             }).catch((error) => {
                 return reject(error);
@@ -28,11 +27,9 @@ class ValidationModel extends BaseResource {
     }
 
     setExpary(author, resetToken, expireToken) {
-        console.log("set expiry")
         return new Promise(function (resolve, reject) {
             dbModel.findByIdAndUpdateElement(collection, author._id, {resetToken: resetToken,expireToken: expireToken})
                 .then((result) =>{
-                    console.log(result);
                     return resolve(result);
                 })
                 .catch((error) => {
@@ -155,7 +152,6 @@ class ValidationModel extends BaseResource {
     }
 
     unBookmarkPost(postId, userId){
-        console.log("unbbokmark called");
         return new Promise(function (resolve, reject) {
             dbModel.findByIdAndUpdateElement(collection, userId, {$pull: {bookmarks: postId}})
                 .then((post) =>{

@@ -15,8 +15,6 @@ const { response } = require('express');
 router.post('/signin', function (req, res) {
     res.set('Access-Control-Allow-Origin', '*');
     const {email, password} = req.body;
-    console.log(email)
-    console.log(password)
     if (!email || !password) {
         return res.status(rcode.INTERNAL_SERVER_500).json(rformat.failure('Email or password is missing'))
     }
@@ -46,11 +44,9 @@ router.get('/checked', function (req, res) {
     res.set('Access-Control-Allow-Origin', '*');
     ValidationModel.getCheckedAuthor()
     .then((authors) => {
-        console.log(authors.length);
            let author_arr = []
            for(let i=0;i<authors.length;i++) {
             let author = authors[i];
-            console.log(author)
             let auth ={};
             auth.name = author.name;
             auth.Phno = author.email;
@@ -73,7 +69,6 @@ router.get('/checked', function (req, res) {
 
 router.post('/notify', function (req, res) {
     res.set('Access-Control-Allow-Origin', '*');
-    console.log("called");
     let {email} = req.body;
     ValidationModel.getAuthor(email)
     .then((author) => {
@@ -110,7 +105,6 @@ router.post('/notify', function (req, res) {
 
 router.post('/jagannath/makeadmin', function (req, res) {
     res.set('Access-Control-Allow-Origin', '*');
-    console.log("called");
     let {email} = req.body;
     ValidationModel.makeAdmin(email)
         .then((authors) => {
@@ -127,7 +121,6 @@ router.post('/jagannath/makeadmin', function (req, res) {
 
 router.post('/jagannath/removeadmin', function (req, res) {
     res.set('Access-Control-Allow-Origin', '*');
-    console.log("called");
     let {email} = req.body;
     ValidationModel.removeAdmin(email)
         .then((authors) => {
@@ -149,7 +142,6 @@ router.post('/signup', function (req, res) {
     }
     ValidationModel.getAuthor(email)
         .then((author) => {
-                console.log(author);
                 if(author) {
                     return res.status(rcode.INTERNAL_SERVER_500).json(rformat.failure('Author with same email Id is already exists!'))
                 }
@@ -162,8 +154,6 @@ router.post('/signup', function (req, res) {
                             term: term
                         }
                         let currentUser = req.user;
-                        console.log(author);
-                        console.log(currentUser);
                         ValidationModel.craeteResource(author, currentUser)
                             .then((result) => {
                                 return res.status(rcode.OK).json(rformat.successMsg(`Author registered successfully`));
@@ -186,7 +176,6 @@ router.put('/update-password', function (req, res) {
     }
     ValidationModel.getresetAuthor(otp)
         .then((author) => {
-                console.log(author);
                 if(!author) {
                     return res.status(rcode.INTERNAL_SERVER_500).json(rformat.failure('OTP is not valid or may be expired'))
                 }
@@ -213,8 +202,6 @@ router.put('/update-password', function (req, res) {
         res.set('Access-Control-Allow-Origin', '*');
         var postId = req.body._id;
         var userId = req.author._id;
-        console.log(postId)
-        console.log(userId);
         ValidationModel.bookmarkPost(postId, userId)
             .then((post) => {
                 return res.status(rcode.OK).json(rformat.success(post));

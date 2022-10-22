@@ -134,8 +134,6 @@ router.put('/like', Authenticate, function (req, res) {
     res.set('Access-Control-Allow-Origin', '*');
     var gossipId = req.body._id;
     var userId = req.author._id;
-    console.log(gossipId)
-    console.log(userId);
     gossipModel.likeGossip(gossipId, userId)
         .then((post) => {
             return res.status(rcode.OK).json(rformat.success(post));
@@ -154,8 +152,6 @@ router.put('/unlike', Authenticate, function (req, res) {
     res.set('Access-Control-Allow-Origin', '*');
     var gossipId = req.body._id;
     var userId = req.author._id;
-    console.log(gossipId)
-    console.log(userId);
     gossipModel.unlikeGossip(gossipId, userId)
         .then((post) => {
             return res.status(rcode.OK).json(rformat.success(post));

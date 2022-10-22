@@ -21,7 +21,6 @@ function Authenticate(req, res, next) {
                 next();
             })
             .catch((error) => {
-                console.log("Unable to fetch author's details");
                 return res.status(rcode.UNAUTHORIZED).json(rformat.failure(`Unable to fetch author's details ${error}`));
             })
         
